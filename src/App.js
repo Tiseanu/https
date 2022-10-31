@@ -24,6 +24,13 @@ function App() {
     });
   };
 
+  // ASYNC + AWAIT:
+  // async function fetchMovies() {
+  //   const response = await fetch('https://swapi.dev/api/films/');
+  //   const data = await response.json();
+  //   updateMoviesList(data.results);
+  // }
+
   // const dummyMovies = [
   //   {
   //     id: 1,
