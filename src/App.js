@@ -1,31 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
 
 function App() {
-  const dummyMovies = [
-    {
-      id: 1,
-      title: 'Some Dummy Movie',
-      openingText: 'This is the opening text of the movie',
-      releaseDate: '2021-05-18',
-    },
-    {
-      id: 2,
-      title: 'Some Dummy Movie 2',
-      openingText: 'This is the second opening text of the movie',
-      releaseDate: '2021-05-19',
-    },
-  ];
+  const [moviesList, updateMoviesList] = useState([]);
+
+  const fetchMovies = () => {
+    // promise
+    fetch('https://swapi.dev/api/films/').then(response => {
+      return response.json(); // buildIn method for the reposnse object // returns a Promise - transforming from json to data takes time
+    }).then(data => {
+      const moviesWithCustomKeys = data.results.map(item => {
+        return {
+          id: item.episode_id,
+          title:  item.title,
+          releaseDate:  item.release_date,
+          openingText:  item.opening_crawl,
+        }
+      });
+      // updateMoviesList(data.results);
+      updateMoviesList(moviesWithCustomKeys);
+    });
+  };
+
+  // const dummyMovies = [
+  //   {
+  //     id: 1,
+  //     title: 'Some Dummy Movie',
+  //     openingText: 'This is the opening text of the movie',
+  //     releaseDate: '2021-05-18',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Some Dummy Movie 2',
+  //     openingText: 'This is the second opening text of the movie',
+  //     releaseDate: '2021-05-19',
+  //   },
+  // ];
 
   return (
     <React.Fragment>
       <section>
-        <button>Fetch Movies</button>
+        <button onClick={fetchMovies}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={dummyMovies} />
+        <MoviesList movies={moviesList} />
       </section>
     </React.Fragment>
   );
