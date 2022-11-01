@@ -5,8 +5,10 @@ import './App.css';
 
 function App() {
   const [moviesList, updateMoviesList] = useState([]);
+  const [isLoading, setIsLoad] = useState(false);
 
   const fetchMovies = () => {
+    setIsLoad(true);
     // promise
     fetch('https://swapi.dev/api/films/').then(response => {
       return response.json(); // buildIn method for the reposnse object // returns a Promise - transforming from json to data takes time
@@ -20,6 +22,7 @@ function App() {
         }
       });
       // updateMoviesList(data.results);
+      setIsLoad(false);
       updateMoviesList(moviesWithCustomKeys);
     });
   };
@@ -52,7 +55,9 @@ function App() {
         <button onClick={fetchMovies}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={moviesList} />
+        {!isLoading && moviesList.length > 0 && <MoviesList movies={moviesList} />}
+        {!isLoading && moviesList.length === 0 && <p>No items to display</p>}
+        {isLoading &&  <p>Loading ... </p>}
       </section>
     </React.Fragment>
   );
