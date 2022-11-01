@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -9,7 +9,7 @@ function App() {
   const [isError, setIsError] = useState(null);
 
   // fetch method
-  const fetchMovies = () => {
+  const fetchMovies = useCallback(() => {
     setIsLoad(true);
     // promise
     fetch('https://swapi.dev/api/films/').then(response => {
@@ -31,9 +31,16 @@ function App() {
       console.log('my err: ', err);
       setIsError(err.message);
     });
-  };
+  }, []
+  );
+
+  useEffect(() => {
+    fetchMovies(); // this will be excuted on load
+  }, [fetchMovies]); // for avoiding a loop we have to use onCallback
+
 
   // ASYNC + AWAIT method:
+  // const fetchMovies = useCallback(async () => {}, []));
   // async function fetchMovies() {
   //   try {
   //     setIsLoad(true);
